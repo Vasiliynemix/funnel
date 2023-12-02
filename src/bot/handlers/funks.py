@@ -162,7 +162,12 @@ async def spam_thread_2(bot: Bot, async_engine: AsyncEngine):
                 for user in users:
                     print(f"spam_thread_2: {user.user_id}")
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await answer_message_1(bot=bot, user_id=user.user_id, db=db)
+                    await bot.send_message(
+                        chat_id=user.user_id,
+                        text=t.SPAM_TEXT,
+                        reply_markup=kb.continue_mp_1,
+                    )
+                    # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:
             print(f"error: {e}")
@@ -186,7 +191,12 @@ async def spam_thread_3(bot: Bot, async_engine: AsyncEngine):
                 for user in users:
                     print(f"spam_thread_3: {user.user_id}")
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await answer_message_1(bot=bot, user_id=user.user_id, db=db)
+                    await bot.send_message(
+                        chat_id=user.user_id,
+                        text=t.SPAM_TEXT,
+                        reply_markup=kb.continue_mp_1,
+                    )
+                    # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:
             print(f"error: {e}")
@@ -210,7 +220,12 @@ async def spam_thread_4(bot: Bot, async_engine: AsyncEngine):
                 for user in users:
                     print(f"spam_thread_4: {user.user_id}")
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await answer_message_1(bot=bot, user_id=user.user_id, db=db)
+                    await bot.send_message(
+                        chat_id=user.user_id,
+                        text=t.SPAM_TEXT,
+                        reply_markup=kb.continue_mp_1,
+                    )
+                    # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:
             print(f"error: {e}")

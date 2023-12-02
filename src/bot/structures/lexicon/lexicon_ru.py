@@ -1,3 +1,6 @@
+# TODO: Сюда вставить текст рассылки
+SPAM_TEXT: str = "lorem ipsum dolor sit amet"
+
 START_MESSAGE: str = "Привет! Это бот Андрея. Нажми забрать подарок, а затем продолжи."
 START_MESSAGE_BTN_TEXT: str = "Забрать подарок"
 

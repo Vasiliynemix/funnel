@@ -16,7 +16,7 @@ class DatabaseConfig:
     user: str | None = os.getenv("DB_USERNAME")
     passwd: str | None = os.getenv("DB_PASSWORD", None)
     port: int = int(os.getenv("DB_PORT", 5432))
-    host: str = os.getenv("DB_HOST", "db")
+    host: str = os.getenv("DB_HOST", "localhost")
 
     driver: str = os.getenv("DRIVER")
     database_system: str = os.getenv("DATABASE_SYSTEM")

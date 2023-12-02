@@ -29,3 +29,7 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
+
+    end_funnel_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=True, default=None
+    )

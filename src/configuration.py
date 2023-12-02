@@ -63,6 +63,10 @@ class PathConfig:
     def image_path(self, image_count: int):
         return os.path.join(self.root_path, self.dir_static_photo, f"{image_count}.jpg")
 
+    @property
+    def json_path(self):
+        return os.path.join(self.root_path, self.dir_static_files, f"data.json")
+
 
 @dataclass
 class Configuration:

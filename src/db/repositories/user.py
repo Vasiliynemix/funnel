@@ -81,3 +81,13 @@ class UserRepo(Repository[User]):
             select(User).where(User.user_id == user_id)
             .where(User.state == state)
         )
+
+    async def get_all(self):
+        users = await self.session.scalars(select(User))
+        return users.all()
+
+    async def update_end_at(self, user_id: int) -> bool:
+        user = await self.get_by_user_id(user_id=user_id)
+        user.end_funnel_at = datetime.now()
+        await self.session.commit()
+        return True

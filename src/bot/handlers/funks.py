@@ -12,10 +12,11 @@ from src.db.database import Database
 
 
 async def answer_message_1(bot: Bot, user_id: int, db: Database):
-    await db.user.update_state(user_id=user_id, state=1)
-    await bot.send_message(
-        chat_id=user_id, text=t.START_MESSAGE, reply_markup=kb.continue_mp_1
-    )
+    if not await db.user.check_state(user_id, -1):
+        await db.user.update_state(user_id=user_id, state=1)
+        await bot.send_message(
+            chat_id=user_id, text=t.START_MESSAGE, reply_markup=kb.continue_mp_1
+        )
 
 
 async def answer_message_2(bot: Bot, user_id: int, db: Database):
@@ -39,10 +40,11 @@ async def answer_message_3(bot: Bot, user_id: int, db: Database):
             reply_markup=kb.continue_mp_3,
         )
     else:
-        await bot.send_message(
-            chat_id=user_id,
-            text="Нажми на кнопку",
-        )
+        if not await db.user.check_state(user_id, -1):
+            await bot.send_message(
+                chat_id=user_id,
+                text="Нажми на кнопку",
+            )
 
 
 async def answer_message_4(bot: Bot, user_id: int, db: Database):
@@ -55,10 +57,11 @@ async def answer_message_4(bot: Bot, user_id: int, db: Database):
             reply_markup=kb.continue_mp_4,
         )
     else:
-        await bot.send_message(
-            chat_id=user_id,
-            text="Нажми на кнопку",
-        )
+        if not await db.user.check_state(user_id, -1):
+            await bot.send_message(
+                chat_id=user_id,
+                text="Нажми на кнопку",
+            )
 
 
 async def answer_message_5(bot: Bot, user_id: int, db: Database):
@@ -71,10 +74,11 @@ async def answer_message_5(bot: Bot, user_id: int, db: Database):
             reply_markup=kb.continue_mp_5,
         )
     else:
-        await bot.send_message(
-            chat_id=user_id,
-            text="Нажми на кнопку",
-        )
+        if not await db.user.check_state(user_id, -1):
+            await bot.send_message(
+                chat_id=user_id,
+                text="Нажми на кнопку",
+            )
 
 
 async def answer_message_6(bot: Bot, user_id: int, db: Database):
@@ -87,10 +91,11 @@ async def answer_message_6(bot: Bot, user_id: int, db: Database):
             reply_markup=kb.continue_mp_6,
         )
     else:
-        await bot.send_message(
-            chat_id=user_id,
-            text="Нажми на кнопку",
-        )
+        if not await db.user.check_state(user_id, -1):
+            await bot.send_message(
+                chat_id=user_id,
+                text="Нажми на кнопку",
+            )
 
 
 async def answer_message_7(bot: Bot, user_id: int, db: Database):
@@ -103,10 +108,11 @@ async def answer_message_7(bot: Bot, user_id: int, db: Database):
             reply_markup=kb.continue_mp_7,
         )
     else:
-        await bot.send_message(
-            chat_id=user_id,
-            text="Нажми на кнопку",
-        )
+        if not await db.user.check_state(user_id, -1):
+            await bot.send_message(
+                chat_id=user_id,
+                text="Нажми на кнопку",
+            )
 
 
 async def answer_message_8(bot: Bot, user_id: int, db: Database):
@@ -119,10 +125,11 @@ async def answer_message_8(bot: Bot, user_id: int, db: Database):
             reply_markup=kb.continue_mp_8,
         )
     else:
-        await bot.send_message(
-            chat_id=user_id,
-            text="Нажми на кнопку",
-        )
+        if not await db.user.check_state(user_id, -1):
+            await bot.send_message(
+                chat_id=user_id,
+                text="Нажми на кнопку",
+            )
 
 
 async def spam_thread_1(bot: Bot, async_engine: AsyncEngine):

@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.bot.structures.role import Role
@@ -78,8 +78,7 @@ class UserRepo(Repository[User]):
 
     async def check_state(self, user_id: int, state: int) -> User | None:
         return await self.session.scalar(
-            select(User).where(User.user_id == user_id)
-            .where(User.state == state)
+            select(User).where(User.user_id == user_id).where(User.state == state)
         )
 
     async def get_all(self):
@@ -89,5 +88,10 @@ class UserRepo(Repository[User]):
     async def update_end_at(self, user_id: int) -> bool:
         user = await self.get_by_user_id(user_id=user_id)
         user.end_funnel_at = datetime.now()
+        await self.session.commit()
+        return True
+
+    async def delete_users(self) -> bool:
+        await self.session.execute(delete(User))
         await self.session.commit()
         return True

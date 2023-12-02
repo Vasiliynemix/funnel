@@ -1,6 +1,6 @@
 import asyncio
 
-from aiogram import Bot
+from aiogram import Bot, types
 from aiogram.types import FSInputFile
 from sqlalchemy.ext.asyncio import AsyncSession, AsyncEngine, async_sessionmaker
 
@@ -129,6 +129,12 @@ async def answer_message_8(bot: Bot, user_id: int, db: Database):
             await bot.send_message(
                 chat_id=user_id,
                 text="Нажми на кнопку",
+            )
+        else:
+            await bot.send_message(
+                chat_id=user_id,
+                text="Конец",
+                reply_markup=types.ReplyKeyboardRemove(),
             )
 
 

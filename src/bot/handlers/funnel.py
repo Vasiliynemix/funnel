@@ -63,3 +63,6 @@ async def funnel_1(message: types.Message, db: Database):
             caption=t.MESSAGE_2,
             parse_mode="HTML",
         )
+        return
+    else:
+        await message.answer("Увидимся позже!", reply_markup=types.ReplyKeyboardRemove())

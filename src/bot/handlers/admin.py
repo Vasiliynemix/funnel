@@ -1,4 +1,4 @@
-from aiogram import Router
+from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message
 
@@ -24,3 +24,8 @@ async def help_handler(
 @router.message(Command(commands=["admin"]), AdminFilter())
 async def admin_menu_handler(message: Message):
     await message.answer("Меню Админа", reply_markup=admin_menu_mp)
+
+
+@router.message(F.text == "Статистика")
+async def stats_handler(message: Message):
+    await message.answer("Статистика")

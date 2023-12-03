@@ -4,7 +4,8 @@ from src.bot.structures.role import Role
 from src.configuration import conf
 
 
-async def is_admin(message: Message) -> Role:
+async def is_admin(message: Message) -> Role | None:
     if message.from_user.id == conf.admin.admin_id:
         return Role.ADMINISTRATOR
-    return Role.USER
+    return None
+

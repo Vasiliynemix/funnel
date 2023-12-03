@@ -44,8 +44,9 @@ class UserRepo(Repository[User]):
     async def update_role(self, user_id: int) -> bool:
         if user_id == conf.admin.admin_id:
             user = await self.get_by_user_id(user_id=user_id)
-            user.role = Role.ADMINISTRATOR
-            await self.session.commit()
+            if user is not None:
+                user.role = Role.ADMINISTRATOR
+                await self.session.commit()
         return True
 
     async def update_at(self, user_id: int) -> bool:

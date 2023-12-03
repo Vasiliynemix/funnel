@@ -48,7 +48,46 @@ async def stats_handler(message: Message, db: Database):
     with open(conf.paths.json_path, "w", encoding="utf-8") as f:
         json.dump(users_dict, f, ensure_ascii=False, indent=4)
 
+    await process_data(users_dict, conf.paths.text_path)
+
     await message.answer_document(
-        document=FSInputFile(conf.paths.json_path), caption="Сбор данных завершен"
+        document=FSInputFile(conf.paths.text_path), caption="Сбор данных завершен"
     )
     os.remove(conf.paths.json_path)
+    os.remove(conf.paths.text_path)
+
+
+async def process_data(data, output_file_path):
+    with open(output_file_path, "w", encoding="utf-8") as output_file:
+        print(data)
+        for item in data:
+            try:
+                user_id = item["user_id"]
+                created_at = item["created_at"]
+                created_at_datetime = datetime.strptime(created_at, "%Y-%m-%d %H:%M:%S")
+                created_at_unix = created_at_datetime.timestamp()
+                end_at = item.get("end_funnel_at")
+                if end_at is not None:
+                    end_at_datetime = datetime.strptime(end_at, "%Y-%m-%d %H:%M:%S")
+                    end_at_unix = end_at_datetime.timestamp()
+                    duration = (end_at_unix - created_at_unix) / 60
+                stage = item["state"]
+                output_file.write(f"Пользователь: {user_id}\n")
+                if end_at is not None:
+                    output_file.write(f"Время прохождения: {duration:.2f} минут\n")
+                else:
+                    output_file.write(f"Сейчас на этапе: {stage}\n\n")
+            except KeyError as e:
+                output_file.write(f"Отсутствует ключ: {e}\n\n")
+            except ValueError as e:
+                output_file.write(f"Ошибка данных: {e}\n\n")
+
+
+def calculate_duration(created_at, end_at):
+    try:
+        created_dt = datetime.fromisoformat(created_at)
+        end_dt = datetime.fromisoformat(end_at)
+    except ValueError:
+        raise ValueError("Неверный формат времени")
+
+    return (end_dt - created_dt).total_seconds() / 60

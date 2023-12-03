@@ -67,6 +67,10 @@ class PathConfig:
     def json_path(self):
         return os.path.join(self.root_path, self.dir_static_files, f"data.json")
 
+    @property
+    def text_path(self):
+        return os.path.join(self.root_path, self.dir_static_files, f"data.txt")
+
 
 @dataclass
 class Configuration:

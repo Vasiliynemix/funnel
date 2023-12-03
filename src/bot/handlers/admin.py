@@ -74,7 +74,7 @@ async def process_data(data, output_file_path):
                 stage = item["state"]
                 output_file.write(f"Пользователь: {user_id}\n")
                 if end_at is not None:
-                    output_file.write(f"Время прохождения: {duration:.2f} минут\n")
+                    output_file.write(f"Время прохождения: {duration:.2f} минут\n\n")
                 else:
                     output_file.write(f"Сейчас на этапе: {stage}\n\n")
             except KeyError as e:

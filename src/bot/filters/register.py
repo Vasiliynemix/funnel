@@ -13,6 +13,8 @@ class RegisterFilter(BaseFilter):
             return False
 
         role = await is_admin(message=message)
+        if user is None:
+            role = Role.USER
         await db.user.new(
             user_id=message.from_user.id,
             user_name=message.from_user.username,

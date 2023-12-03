@@ -5,6 +5,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import CallbackQuery, Message
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from src.bot.filters.utils.is_admin import is_admin
 from src.bot.structures.data_structure import TransferData
 from src.db.database import Database
 
@@ -21,5 +22,6 @@ class DatabaseMiddleware(BaseMiddleware):
         )
         async with async_session_factory() as session:
             data["db"] = Database(session)
-            await data["db"].user.update_at(user_id=event.from_user.id)
+            if await is_admin(event):
+                await data["db"].user.update_role(user_id=event.from_user.id)
             return await handler(event, data)

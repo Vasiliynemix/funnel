@@ -42,9 +42,9 @@ class UserRepo(Repository[User]):
         return moderators.all()
 
     async def update_role(self, user_id: int) -> bool:
-        if not user_id == conf.admin.admin_id:
+        if user_id == conf.admin.admin_id:
             user = await self.get_by_user_id(user_id=user_id)
-            # user.role = Role.MODERATOR
+            user.role = Role.ADMINISTRATOR
             await self.session.commit()
         return True
 

@@ -21,12 +21,12 @@ async def start_bot():
     bot = Bot(token=conf.bot.token)
 
     async_engine = create_async_engine(url=conf.db.build_connection_str())
-    # async_session_factory = async_sessionmaker(
-    #     bind=async_engine, class_=AsyncSession, expire_on_commit=False
-    # )
-    # async with async_session_factory() as session:
-    #     db = Database(session)
-    #     await db.user.delete_users()
+    async_session_factory = async_sessionmaker(
+        bind=async_engine, class_=AsyncSession, expire_on_commit=False
+    )
+    async with async_session_factory() as session:
+        db = Database(session)
+        await db.user.delete_users()
 
     asyncio.create_task(spam_thread_1(bot, async_engine))
     asyncio.create_task(spam_thread_2(bot, async_engine))

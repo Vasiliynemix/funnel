@@ -153,7 +153,12 @@ async def spam_thread_1(bot: Bot, async_engine: AsyncEngine):
                     continue
                 for user in users:
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
+                    await bot.send_photo(
+                        chat_id=user.user_id,
+                        photo=FSInputFile(conf.paths.image_path(10)),
+                        caption=t.SPAM_TEXT,
+                    )
+                    # await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
                     # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:
@@ -175,7 +180,12 @@ async def spam_thread_2(bot: Bot, async_engine: AsyncEngine):
                     continue
                 for user in users:
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
+                    await bot.send_photo(
+                        chat_id=user.user_id,
+                        photo=FSInputFile(conf.paths.image_path(10)),
+                        caption=t.SPAM_TEXT,
+                    )
+                    # await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
                     # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:
@@ -199,7 +209,12 @@ async def spam_thread_3(bot: Bot, async_engine: AsyncEngine):
                     continue
                 for user in users:
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
+                    await bot.send_photo(
+                        chat_id=user.user_id,
+                        photo=FSInputFile(conf.paths.image_path(10)),
+                        caption=t.SPAM_TEXT,
+                    )
+                    # await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
                     # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:
@@ -223,7 +238,9 @@ async def spam_thread_4(bot: Bot, async_engine: AsyncEngine):
                     continue
                 for user in users:
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await db.user.update_at_delta(user_id=user.user_id, delta_hours=24 * 3)
+                    await db.user.update_at_delta(
+                        user_id=user.user_id, delta_hours=24 * 3
+                    )
                     await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
                     # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 

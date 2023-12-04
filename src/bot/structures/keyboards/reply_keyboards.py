@@ -60,7 +60,7 @@ continue_mp_8 = ReplyKeyboardMarkup(
 
 admin_menu_mp = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="Статистика")],
+        [KeyboardButton(text="Статистика"), KeyboardButton(text="Рассылка")],
     ],
     resize_keyboard=True,
 )

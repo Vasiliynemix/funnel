@@ -56,6 +56,13 @@ class UserRepo(Repository[User]):
             await self.session.commit()
         return True
 
+    async def update_at_delta(self, user_id: int, delta_hours: int) -> bool:
+        user = await self.get_by_user_id(user_id=user_id)
+        if user is not None:
+            user.updated_at = datetime.now() + timedelta(hours=delta_hours)
+            await self.session.commit()
+        return True
+
     async def update_state(self, user_id: int, state: int) -> bool:
         user = await self.get_by_user_id(user_id=user_id)
         user.state = state
@@ -63,12 +70,26 @@ class UserRepo(Repository[User]):
         return True
 
     async def get_users_for_answer(self, delta_hours: int, count_spam: int):
-        users = await self.session.scalars(
-            select(User)
-            .where(User.count_spam == count_spam)
-            .where(User.created_at > datetime.now() - timedelta(days=90))
-            .where(User.updated_at < datetime.now() - timedelta(hours=delta_hours))
-        )
+        time_now = datetime.now()
+        at_end = time_now - timedelta(days=90)
+        at_spam = time_now - timedelta(hours=delta_hours)
+        if count_spam != 3:
+            users = await self.session.scalars(
+                select(User)
+                .where(User.count_spam == count_spam)
+                .where(User.created_at > at_end)
+                .where(User.updated_at < at_spam)
+            )
+        else:
+            users = await self.session.scalars(
+                select(User)
+                .where(User.created_at > at_end)
+                .where(User.updated_at < at_spam)
+            )
+        return users.all()
+
+    async def get_users(self):
+        users = await self.session.scalars(select(User))
         return users.all()
 
     async def update_count_spam(self, user_id: int) -> bool:

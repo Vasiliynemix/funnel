@@ -2,12 +2,14 @@ import json
 import os
 from datetime import datetime
 
-from aiogram import Router, F
+from aiogram import Router, F, Bot
 from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, FSInputFile
 
 from src.bot.filters.admin import AdminFilter
 from src.bot.structures.keyboards.reply_keyboards import admin_menu_mp
+from src.bot.structures.states.waiting_continue import AnnounceState
 from src.configuration import conf
 from src.db.database import Database
 
@@ -55,6 +57,22 @@ async def stats_handler(message: Message, db: Database):
     )
     os.remove(conf.paths.json_path)
     os.remove(conf.paths.text_path)
+
+
+@router.message(F.text == "Рассылка", AdminFilter())
+async def announce_handler(message: Message, state: FSMContext):
+    await state.set_state(AnnounceState.message)
+    await message.answer("Отправьте текст рассылки")
+
+
+@router.message(AnnounceState.message, AdminFilter())
+async def announce_text_handler(message: Message, db: Database, state: FSMContext, bot: Bot):
+    await state.clear()
+    users = await db.user.get_users()
+    await message.answer("Рассылка начата. Пользователей: " + str(len(users)))
+    for user in users:
+        await bot.send_message(chat_id=user.user_id, text=message.text)
+    await message.answer("Рассылка завершена")
 
 
 async def process_data(data, output_file_path):

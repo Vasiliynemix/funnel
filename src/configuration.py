@@ -59,9 +59,14 @@ class PathConfig:
     root_path: str = str(Path(__file__).parent.parent)
     dir_static_files: str = os.path.join(root_path, "static")
     dir_static_photo: str = os.path.join(root_path, dir_static_files, "images")
+    dir_static_docs: str = os.path.join(root_path, dir_static_files, "docs")
 
     def image_path(self, image_count: int):
         return os.path.join(self.root_path, self.dir_static_photo, f"{image_count}.jpg")
+
+    @property
+    def doc_path(self):
+        return os.path.join(self.root_path, self.dir_static_docs, f"{DOC_NAME}")
 
     @property
     def json_path(self):

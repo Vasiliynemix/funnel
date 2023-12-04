@@ -28,6 +28,7 @@ async def answer_message_2(bot: Bot, user_id: int, db: Database):
         reply_markup=kb.continue_mp_2,
         parse_mode="HTML",
     )
+    # await bot.send_document(chat_id=user_id, document=FSInputFile(conf.paths.doc_path))
 
 
 async def answer_message_3(bot: Bot, user_id: int, db: Database):
@@ -151,9 +152,9 @@ async def spam_thread_1(bot: Bot, async_engine: AsyncEngine):
                 if users is None:
                     continue
                 for user in users:
-                    print(f"spam_thread_1: {user.user_id}")
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await answer_message_1(bot=bot, user_id=user.user_id, db=db)
+                    await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
+                    # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:
             print(f"error: {e}")
@@ -173,13 +174,8 @@ async def spam_thread_2(bot: Bot, async_engine: AsyncEngine):
                 if users is None:
                     continue
                 for user in users:
-                    print(f"spam_thread_2: {user.user_id}")
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await bot.send_message(
-                        chat_id=user.user_id,
-                        text=t.SPAM_TEXT,
-                        reply_markup=kb.continue_mp_1,
-                    )
+                    await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
                     # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:
@@ -202,13 +198,8 @@ async def spam_thread_3(bot: Bot, async_engine: AsyncEngine):
                 if users is None:
                     continue
                 for user in users:
-                    print(f"spam_thread_3: {user.user_id}")
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await bot.send_message(
-                        chat_id=user.user_id,
-                        text=t.SPAM_TEXT,
-                        reply_markup=kb.continue_mp_1,
-                    )
+                    await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
                     # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:
@@ -231,13 +222,9 @@ async def spam_thread_4(bot: Bot, async_engine: AsyncEngine):
                 if users is None:
                     continue
                 for user in users:
-                    print(f"spam_thread_4: {user.user_id}")
                     await db.user.update_count_spam(user_id=user.user_id)
-                    await bot.send_message(
-                        chat_id=user.user_id,
-                        text=t.SPAM_TEXT,
-                        reply_markup=kb.continue_mp_1,
-                    )
+                    await db.user.update_at_delta(user_id=user.user_id, delta_hours=24 * 3)
+                    await bot.send_message(chat_id=user.user_id, text=t.SPAM_TEXT)
                     # await answer_message_1(bot=bot, user_id=user.user_id, db=db)
 
         except Exception as e:

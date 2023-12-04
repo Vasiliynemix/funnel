@@ -1,6 +1,11 @@
 # TODO: Сюда вставить текст рассылки
 SPAM_TEXT: str = "lorem ipsum dolor sit amet"
 
+# TODO: Сюда вставить имя документа - папка для документа(/static/docs/)
+#  - раскомментировать src/bot/handlers/funks.py строку 31, если нужно отправить файл
+#  - название DOC_NAME должно совпадать с именем документа в папке
+DOC_NAME: str = "text.txt"
+
 START_MESSAGE: str = "Привет! Это бот Андрея. Нажми забрать подарок, а затем продолжи."
 START_MESSAGE_BTN_TEXT: str = "Забрать подарок"
 

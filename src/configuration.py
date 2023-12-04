@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 
 from sqlalchemy.engine import URL
 
+from src.bot.structures.lexicon.lexicon_ru import DOC_NAME
+
 load_dotenv()
 
 

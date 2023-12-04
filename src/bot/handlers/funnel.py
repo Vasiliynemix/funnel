@@ -59,11 +59,10 @@ async def funnel_1(message: types.Message, db: Database):
         await message.delete()
         await db.user.update_state(user_id=message.from_user.id, state=-1)
         await db.user.update_end_at(user_id=message.from_user.id)
-        await message.answer_photo(
-            photo=FSInputFile(conf.paths.image_path(1)),
-            caption=t.MESSAGE_2,
-            parse_mode="HTML",
-        )
+        await message.answer(t.MESSAGE_END_DOC)
+        await message.answer_document(document=FSInputFile(conf.paths.doc_path))
         return
     else:
-        await message.answer("Увидимся позже!", reply_markup=types.ReplyKeyboardRemove())
+        await message.answer(
+            "Увидимся позже!", reply_markup=types.ReplyKeyboardRemove()
+        )

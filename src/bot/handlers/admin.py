@@ -33,32 +33,6 @@ async def admin_menu_handler(message: Message):
     await message.answer("Меню Админа", reply_markup=admin_menu_mp)
 
 
-@router.message(F.text == "Статистика")
-async def stats_handler(message: Message, db: Database):
-    await message.answer("Начал сбор статистики...")
-    users = await db.user.get_all()
-    await message.answer("Количество пользователей: " + str(len(users)))
-    users_dict = [user.__dict__ for user in users]
-    for item in users_dict:
-        item.pop("_sa_instance_state", None)
-        item.pop("waiting_for_continue", None)
-        item.pop("id", None)
-        for key, value in item.items():
-            if isinstance(value, datetime):
-                item[key] = value.strftime("%Y-%m-%d %H:%M:%S")
-
-    with open(conf.paths.json_path, "w", encoding="utf-8") as f:
-        json.dump(users_dict, f, ensure_ascii=False, indent=4)
-
-    await process_data(users_dict, conf.paths.text_path)
-
-    await message.answer_document(
-        document=FSInputFile(conf.paths.text_path), caption="Сбор данных завершен"
-    )
-    os.remove(conf.paths.json_path)
-    os.remove(conf.paths.text_path)
-
-
 @router.message(F.text == "Рассылка", AdminFilter())
 async def announce_handler(message: Message, state: FSMContext):
     await state.set_state(AnnounceState.message)
@@ -66,7 +40,9 @@ async def announce_handler(message: Message, state: FSMContext):
 
 
 @router.message(AnnounceState.message, AdminFilter())
-async def announce_text_handler(message: Message, db: Database, state: FSMContext, bot: Bot):
+async def announce_text_handler(
+    message: Message, db: Database, state: FSMContext, bot: Bot
+):
     await state.clear()
     users = await db.user.get_users()
     await message.answer("Рассылка начата. Пользователей: " + str(len(users)))
@@ -75,33 +51,46 @@ async def announce_text_handler(message: Message, db: Database, state: FSMContex
     await message.answer("Рассылка завершена")
 
 
-async def process_data(data, output_file_path):
-    with open(output_file_path, "w", encoding="utf-8") as output_file:
-        print(data)
-        for item in data:
-            try:
-                user_id = item["user_id"]
-                created_at = item["created_at"]
-                first_name = item["first_name"]
-                last_name = item["last_name"]
-                user_name = item["user_name"]
-                created_at_datetime = datetime.strptime(created_at, "%Y-%m-%d %H:%M:%S")
-                created_at_unix = created_at_datetime.timestamp()
-                end_at = item.get("end_funnel_at")
-                if end_at is not None:
-                    end_at_datetime = datetime.strptime(end_at, "%Y-%m-%d %H:%M:%S")
-                    end_at_unix = end_at_datetime.timestamp()
-                    duration = (end_at_unix - created_at_unix) / 60
-                stage = item["state"]
-                output_file.write(f"Пользователь id: {user_id}, username: {user_name}, имя: {first_name}, фамилия: {last_name}\n")
-                if end_at is not None:
-                    output_file.write(f"Время прохождения: {duration:.2f} минут\n\n")
-                else:
-                    output_file.write(f"Сейчас на этапе: {stage}\n\n")
-            except KeyError as e:
-                output_file.write(f"Отсутствует ключ: {e}\n\n")
-            except ValueError as e:
-                output_file.write(f"Ошибка данных: {e}\n\n")
+@router.message(F.text == "Статистика")
+async def stats_handler(message: Message, db: Database):
+    await message.answer("Начал сбор статистики...")
+    users = await db.user.get_all()
+    await message.answer("Количество пользователей: " + str(len(users)))
+    users_dict = [user.__dict__ for user in users]
+    with open(conf.paths.text_path, "w", encoding="utf-8") as output_file:
+        await process_data(users_dict, output_file)
+
+    await message.answer_document(
+        document=FSInputFile(conf.paths.text_path), caption="Сбор данных завершен"
+    )
+    os.remove(conf.paths.text_path)
+
+
+async def process_data(data, output_file):
+    for item in data:
+        try:
+            user_id = item["user_id"]
+            created_at = item["created_at"]
+            first_name = item["first_name"]
+            last_name = item["last_name"]
+            user_name = item["user_name"]
+            created_at_unix = created_at.timestamp()
+            end_at = item.get("end_funnel_at")
+            if end_at is not None:
+                end_at_unix = end_at.timestamp()
+                duration = (end_at_unix - created_at_unix) / 60
+            stage = item["state"]
+            output_file.write(
+                f"Пользователь\nid: {user_id}\nusername: {user_name}\nимя: {first_name}\nфамилия: {last_name}\n"
+            )
+            if end_at is not None:
+                output_file.write(f"Время прохождения: {duration:.2f} минут\n\n")
+            else:
+                output_file.write(f"Сейчас на этапе: {stage}\n\n")
+        except KeyError as e:
+            output_file.write(f"Отсутствует ключ: {e}\n\n")
+        except ValueError as e:
+            output_file.write(f"Ошибка данных: {e}\n\n")
 
 
 def calculate_duration(created_at, end_at):

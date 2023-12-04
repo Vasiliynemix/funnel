@@ -82,6 +82,9 @@ async def process_data(data, output_file_path):
             try:
                 user_id = item["user_id"]
                 created_at = item["created_at"]
+                first_name = item["first_name"]
+                last_name = item["last_name"]
+                user_name = item["user_name"]
                 created_at_datetime = datetime.strptime(created_at, "%Y-%m-%d %H:%M:%S")
                 created_at_unix = created_at_datetime.timestamp()
                 end_at = item.get("end_funnel_at")
@@ -90,7 +93,7 @@ async def process_data(data, output_file_path):
                     end_at_unix = end_at_datetime.timestamp()
                     duration = (end_at_unix - created_at_unix) / 60
                 stage = item["state"]
-                output_file.write(f"Пользователь: {user_id}\n")
+                output_file.write(f"Пользователь id: {user_id}, username: {user_name}, имя: {first_name}, фамилия: {last_name}\n")
                 if end_at is not None:
                     output_file.write(f"Время прохождения: {duration:.2f} минут\n\n")
                 else:

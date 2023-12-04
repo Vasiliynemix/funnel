@@ -18,6 +18,7 @@ class UserRepo(Repository[User]):
         user_id: int,
         user_name: str | None = None,
         first_name: str | None = None,
+        last_name: str | None = None,
         second_name: str | None = None,
         language_code: str | None = None,
         is_premium: bool | None = False,
@@ -27,6 +28,8 @@ class UserRepo(Repository[User]):
             User(
                 user_id=user_id,
                 user_name=user_name,
+                first_name=first_name,
+                last_name=last_name,
                 language_code=language_code,
                 role=role,
             )

@@ -12,6 +12,7 @@ router = Router()
 @router.message(CommandStart())
 @router.message(CommandStart(), RegisterFilter())
 async def start_handler(message: types.Message, db: Database):
+    print(message)
     if not await db.user.check_state(user_id=message.from_user.id, state=-1):
         await answer_message_1(bot=message.bot, user_id=message.from_user.id, db=db)
     else:
